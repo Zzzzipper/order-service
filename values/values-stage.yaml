@@ -1,4 +1,4 @@
-  # Default values for merchants-api.
+  # Default values for orders-api.
   # This is a YAML-formatted file.
   # Declare variables to be passed into your templates.
 nameOverride: ""
@@ -6,7 +6,7 @@ fullnameOverride: ""
 replicaCount: 1
 workloadEnvironment: "stage"
 image:
-  repository: "registry.mapcard.pro/stage/merchants-api-stage"
+  repository: "registry.mapcard.pro/stage/orders-api-stage"
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
