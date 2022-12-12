@@ -1,0 +1,17 @@
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_HOST: tcp://localhost:2375
+  REPO_NAME: orders-api
+  DOCKER_BUILD_ARGS: ""
+  BINARY_NAME: orders-api
+  RELEASE_NAME: orders-api
+  SERVICE_NAME: orders-api
+
+stages:
+  - build
+  - deploy
+
+include:
+  - local: ".hidden/templates.yaml"
+  - local: ".hidden/stage.yaml"
+  - local: ".hidden/prod.yaml"

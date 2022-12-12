@@ -1,0 +1,61 @@
+version: '3'
+services:
+  app:
+    container_name: orders-service_app
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+    build: 
+      context: .
+      args:
+        API_PROTO_DEPENDENCIES_TOKEN: ${API_PROTO_DEPENDENCIES_TOKEN}
+    ports:
+      - 8080:8080
+    restart: on-failure
+    volumes:
+      - api:/usr/src/app/
+    depends_on:
+      - fullstack-postgres
+    networks:
+      - fullstack
+
+  fullstack-postgres:
+    image: postgres:13
+    container_name: postgres-orders
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - DATABASE_HOST=${DB_HOST}
+    ports:
+      - '5432:5432'
+    volumes:
+      - database_postgres:/var/lib/postgresql/data-orders
+    networks:
+      - fullstack
+
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: pgadmin_container
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+  #   depends_on:
+  #     - fullstack-postgres
+  #   ports:
+  #     - "5050:80"
+  #   networks:
+  #     - fullstack
+  #   restart: unless-stopped
+
+volumes:
+  api:
+  database_postgres:
+
+    # Networks to be created to facilitate communication between containers
+networks:
+  fullstack:
+    driver: bridge

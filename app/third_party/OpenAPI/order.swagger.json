@@ -1,0 +1,454 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/order.proto",
+    "version": "version not set"
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {},
+  "definitions": {
+    "apiByer": {
+      "type": "object",
+      "properties": {
+        "FullName": {
+          "type": "string",
+          "format": "string",
+          "description": "Полное имя покупателя"
+        },
+        "Email": {
+          "type": "string",
+          "format": "string",
+          "description": "Адрес электронной почты"
+        },
+        "Phone": {
+          "type": "string",
+          "format": "string",
+          "description": "Номер телефона"
+        },
+        "FirstName": {
+          "type": "string",
+          "format": "string",
+          "description": "Имя"
+        },
+        "LastName": {
+          "type": "string",
+          "format": "string",
+          "description": "Фамилия"
+        },
+        "MiddleName": {
+          "type": "string",
+          "format": "string",
+          "description": "Отчество"
+        },
+        "Birth": {
+          "type": "string",
+          "format": "string",
+          "description": "Дата рождения"
+        },
+        "Street": {
+          "type": "string",
+          "format": "string",
+          "description": "Улица"
+        },
+        "Address": {
+          "type": "string",
+          "format": "string",
+          "description": "Номер дома, квартира"
+        },
+        "City": {
+          "type": "string",
+          "format": "string",
+          "description": "Город проживания"
+        },
+        "Country": {
+          "type": "string",
+          "format": "string",
+          "description": "Страна проживания"
+        },
+        "Postcode": {
+          "type": "string",
+          "format": "string",
+          "description": "Почтовый индекс"
+        }
+      }
+    },
+    "apiCheque": {
+      "type": "object",
+      "properties": {
+        "additional_attribute": {
+          "type": "string",
+          "format": "string",
+          "description": "Дополнительный реквизит чека (БСО), не более 16 символов"
+        },
+        "penalty_attribute": {
+          "type": "string",
+          "format": "string",
+          "description": "Дополнительный реквизит чека (БСО), не более 16 символов"
+        }
+      }
+    },
+    "apiCredential": {
+      "type": "object",
+      "properties": {
+        "login": {
+          "type": "string",
+          "format": "string",
+          "description": "Логин держателя карты, зарегистрированного в системе Продавца. Используются только в случае, если карта сохранена к конкретному пользователю"
+        },
+        "password": {
+          "type": "string",
+          "format": "string",
+          "description": "Пароль держателя карты, зарегистрированного в системе Продавца. Используются только в случае, если карта сохранена к конкретному пользователю"
+        },
+        "merchant_name": {
+          "type": "string",
+          "format": "string",
+          "description": "Наименование продавца. Используются только в случае, если карта сохранена за Мерчантом"
+        },
+        "merchant_password": {
+          "type": "string",
+          "format": "string",
+          "description": "Пароль Мерчанта для совершения операций. Используются только в случае, если карта сохранена за Мерчантом"
+        },
+        "terminal_password": {
+          "type": "string",
+          "format": "string",
+          "description": "Пароль терминала для совершения операций. Используются только в случае, если карта сохранена за терминалом"
+        }
+      }
+    },
+    "apiGoods": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "format": "string",
+          "description": "Наименование товара/услуги, не более 128 символов"
+        },
+        "price": {
+          "type": "string",
+          "format": "string",
+          "description": "Сумма блокировки в минимальных единицах валюты (копейках)"
+        },
+        "tax": {
+          "type": "integer",
+          "format": "string",
+          "description": "Ставка НДС. Целое число от 1 до 6. В случае отсутствия в запросе, значение берется из настроек терминала1 – ставка НДС 20%2 – ставка НДС 10%3 – ставка НДС расч. 20/1204 – ставка НДС расч. 10/1105 – ставка НДС 0%6 – НДС не облагается"
+        },
+        "payment_subject_type": {
+          "type": "integer",
+          "format": "string",
+          "description": "\tПризнак предмета расчета. Целое число от 1 до 13. Параметр не обязательный, в случае отсутствия в запросе, будет передано значение 1 – Товар.1 – Товар2 – Подакцизный товар3 – Работа4 – Услуга5 – Ставка азартной игры6 – Выигрыш азартной игры7 – Лотерейный билет8 – Выигрыш лотереи9 – Предоставление РИД10 - Платеж11 – Агентское вознаграждение12 – Выплата13 – Иной предмет расчета"
+        },
+        "supplier": {
+          "format": "object",
+          "$ref": "#/definitions/apiSupplier",
+          "description": "Данные поставщика. Опциональное поле в товаре."
+        }
+      }
+    },
+    "apiOrder": {
+      "type": "object",
+      "properties": {
+        "Success": {
+          "type": "boolean",
+          "format": "true,false",
+          "description": "Флаг успешности операции\ttrue/false"
+        },
+        "OrderId": {
+          "type": "string",
+          "format": "string",
+          "description": "Идентификатор платежа в системе Продавца"
+        },
+        "Amount": {
+          "type": "integer",
+          "format": "integer",
+          "description": "Заблокированная сумма. Передается, если в ответе Success=true"
+        },
+        "Type": {
+          "type": "string",
+          "format": "string",
+          "description": "Тип создаваемой сессии. Pay - платежная сессия, Add - сессия для сохранения карты. Соответствует переданному в запросе."
+        },
+        "ErrCode": {
+          "type": "string",
+          "format": "string",
+          "description": "Описание ошибки. Передается, если в ответе Success=false"
+        },
+        "ErrMessage": {
+          "type": "string",
+          "format": "string",
+          "description": "Опциональный параметр. Дополнительное описание ошибки"
+        },
+        "Rrn": {
+          "type": "string",
+          "format": "string",
+          "description": "RRN(Reference Retrieval Number) операции. Уникальный идентификатор банковской транзакции, который назначается банком-эквайрером при проведении платежа."
+        },
+        "Key": {
+          "type": "string",
+          "format": "string",
+          "description": "Идентификатор Продавца. Выдается с параметрами тестового/боевого доступа"
+        },
+        "OrderRequest": {
+          "format": "object",
+          "$ref": "#/definitions/apiOrderRequest",
+          "description": "Идентификатор Продавца. Выдается с параметрами тестового/боевого доступа"
+        }
+      }
+    },
+    "apiOrderRequest": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "format": "string",
+          "description": "Идентификатор Продавца. Выдается с параметрами тестового/боевого доступа"
+        },
+        "merchant_order_id": {
+          "type": "string",
+          "format": "string",
+          "description": "Идентификатор платежа в системе Продавца"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "integer",
+          "description": "Сумма блокировки в минимальных единицах валюты (копейках)"
+        },
+        "add_card": {
+          "type": "boolean",
+          "format": "true,false",
+          "description": "Параметр, задающий необходимость сохранения карты после оплаты. Используется вместе с параметром 'type':'Pay'. Значение по умолчанию false - карта не сохраняется"
+        },
+        "type": {
+          "type": "string",
+          "format": "string",
+          "description": "Тип создаваемой сессии. Pay - платежная сессия, Add - сессия для сохранения карты"
+        },
+        "lifetime": {
+          "type": "string",
+          "format": "object",
+          "description": "Срок действия сессии (в секундах), по истечении которого оплата по данной сессии будет невозможна. Если не передан, время жизни сессии устанавливается равным одной неделе"
+        },
+        "payment_type": {
+          "format": "string",
+          "$ref": "#/definitions/apiPayType",
+          "description": "Тип оплаты: CARD, APPLE, GOOGLE, SAMSUNG, IPS"
+        },
+        "credential": {
+          "format": "object",
+          "$ref": "#/definitions/apiCredential",
+          "description": "Подтверждение прав доступа и информация об операторе"
+        },
+        "custom_params": {
+          "type": "object",
+          "format": "object",
+          "description": "Дополнительные параметры платежа, для отображения на шаблоне и для составления адреса возврата пользователя в случае, если он параметризован."
+        },
+        "split": {
+          "type": "array",
+          "format": "object",
+          "items": {
+            "$ref": "#/definitions/apiSplit"
+          },
+          "description": "Используется для разделение суммы произведенного списания на составные части для последующих расчетов с контрагентами. Общая сумма всех составных частей должна соответствовать amount"
+        },
+        "currency": {
+          "type": "string",
+          "format": "string",
+          "description": "Код валюты ISO 4217"
+        },
+        "byer": {
+          "format": "object",
+          "$ref": "#/definitions/apiByer",
+          "description": "Покупатель"
+        },
+        "cheque": {
+          "format": "object",
+          "$ref": "#/definitions/apiCheque",
+          "description": "Перечень передаваемых параметров для отправки в ОФД (54-ФЗ)."
+        },
+        "goods": {
+          "type": "array",
+          "format": "object",
+          "items": {
+            "$ref": "#/definitions/apiGoods"
+          },
+          "description": "Список наименований товаров/услуг для отправки в ОФД (54-ФЗ). Общая сумма всех товаров должна соответствовать amount."
+        },
+        "card": {
+          "format": "object",
+          "$ref": "#/definitions/apiPayInfo",
+          "description": "Данные карты для совершения транзакции"
+        }
+      }
+    },
+    "apiPayInfo": {
+      "type": "object",
+      "properties": {
+        "pan": {
+          "type": "string",
+          "format": "string",
+          "description": "Номер карты"
+        },
+        "emonth": {
+          "type": "integer",
+          "format": "integer",
+          "description": "Месяц истечения срока действия карты"
+        },
+        "eyear": {
+          "type": "integer",
+          "format": "integer",
+          "description": "Год истечения срока действия карты"
+        },
+        "cvv": {
+          "type": "string",
+          "format": "string",
+          "description": "CVC2/CVV2. Параметр является опциональным"
+        },
+        "holder": {
+          "type": "string",
+          "format": "string",
+          "description": "Фамилия и имя держателя карты"
+        },
+        "uid": {
+          "type": "string",
+          "format": "string",
+          "description": "Идентификатор карты в системе theMAP или значение «Random». При указании значения «Random» выбирается случайная карта из привязанных к данному пользователю"
+        }
+      }
+    },
+    "apiPayType": {
+      "type": "string",
+      "enum": [
+        "CARD",
+        "APPLE",
+        "GOOGLE",
+        "SAMSUNG",
+        "IPS",
+        "YANDEX"
+      ],
+      "default": "CARD",
+      "title": "PayType"
+    },
+    "apiSplit": {
+      "type": "object",
+      "properties": {
+        "split_terminal_id": {
+          "type": "integer",
+          "format": "integer",
+          "description": "Номер терминала для проведения операции"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "integer",
+          "description": "Сумма разделения"
+        },
+        "purpose": {
+          "type": "string",
+          "format": "string",
+          "description": "Описание"
+        },
+        "fee": {
+          "type": "integer",
+          "format": "integer",
+          "description": "Размер комиссии"
+        }
+      }
+    },
+    "apiSupplier": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "format": "string",
+          "description": "Наименование"
+        },
+        "inn": {
+          "type": "string",
+          "format": "string",
+          "description": "ИНН поставщика"
+        },
+        "phone_numbers": {
+          "type": "array",
+          "format": "string",
+          "items": {
+            "type": "string"
+          },
+          "description": "Список номеров телефонов"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "protobufNullValue": {
+      "type": "string",
+      "enum": [
+        "NULL_VALUE"
+      ],
+      "default": "NULL_VALUE",
+      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\n The JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
+    },
+    "runtimeError": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "runtimeStreamError": {
+      "type": "object",
+      "properties": {
+        "grpc_code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "http_code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "http_status": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
