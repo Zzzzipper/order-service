@@ -2,7 +2,7 @@ variables:
   DOCKER_DRIVER: overlay2
   DOCKER_HOST: tcp://localhost:2375
   REPO_NAME: orders-api
-  DOCKER_BUILD_ARGS: ""
+  DOCKER_BUILD_ARGS: "--build-arg API_PROTO_DEPENDENCIES_TOKEN=yj7TrYGMyoxRwE2tCSHG"
   BINARY_NAME: orders-api
   RELEASE_NAME: orders-api
   SERVICE_NAME: orders-api
