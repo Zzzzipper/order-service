@@ -1,0 +1,17 @@
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_HOST: tcp://localhost:2375
+  REPO_NAME: merchants-api
+  DOCKER_BUILD_ARGS: ""
+  BINARY_NAME: merchants-api
+  RELEASE_NAME: merchants-api
+  SERVICE_NAME: merchants-api
+
+stages:
+  - build
+  - deploy
+
+include:
+  - local: ".hidden/templates.yaml"
+  - local: ".hidden/stage.yaml"
+  - local: ".hidden/prod.yaml"
