@@ -71,7 +71,7 @@ ingress:
       paths:
         - path: /api/order/?(.*)
           pathType: Prefix
-          servicePort: 8000
+          servicePort: 8080
   tls:
    - secretName: tls-mc-secret
      hosts:
