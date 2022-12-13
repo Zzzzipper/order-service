@@ -1,4 +1,4 @@
--- name: AddOrder :one
+-- name: AddOrder :exec
 INSERT INTO orders (
   order_request,
   rrn,
@@ -9,8 +9,7 @@ INSERT INTO orders (
   $2,
   $3,
   $4
-)
-RETURNING *;
+);
 
 -- name: DeleteOrder :one
 DELETE FROM orders

@@ -8,7 +8,7 @@ import (
 	"encoding/json"
 )
 
-const addOrder = `-- name: AddOrder :one
+const addOrder = `-- name: AddOrder :exec
 INSERT INTO orders (
   order_request,
   rrn,
@@ -20,7 +20,6 @@ INSERT INTO orders (
   $3,
   $4
 )
-RETURNING id, create_time, order_request, rrn, order_id, seller_id
 `
 
 type AddOrderParams struct {
@@ -30,23 +29,14 @@ type AddOrderParams struct {
 	SellerID     string
 }
 
-func (q *Queries) AddOrder(ctx context.Context, arg AddOrderParams) (Order, error) {
-	row := q.db.QueryRowContext(ctx, addOrder,
+func (q *Queries) AddOrder(ctx context.Context, arg AddOrderParams) error {
+	_, err := q.db.ExecContext(ctx, addOrder,
 		arg.OrderRequest,
 		arg.Rrn,
 		arg.OrderID,
 		arg.SellerID,
 	)
-	var i Order
-	err := row.Scan(
-		&i.ID,
-		&i.CreateTime,
-		&i.OrderRequest,
-		&i.Rrn,
-		&i.OrderID,
-		&i.SellerID,
-	)
-	return i, err
+	return err
 }
 
 const deleteOrder = `-- name: DeleteOrder :one

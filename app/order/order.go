@@ -38,16 +38,17 @@ func (d Directory) AddOrder(ctx context.Context, req *api.OrderRequest) (*api.Or
 		}, nil
 	}
 
-	var pgOrder Order
-	pgOrder, err = d.querier.AddOrder(ctx, AddOrderParams{
+	err = d.querier.AddOrder(ctx, AddOrderParams{
 		OrderRequest: json.RawMessage(orderRequest),
 		Rrn:          "{}",
 		OrderID:      req.MerchantOrderId,
 		SellerID:     req.Key,
 	})
 
+	fmt.Printf("Error after AddOrder: %v\n", err)
+
 	if err != nil {
-		status.Errorf(codes.Internal, "unexpected error adding partner: %s", err.Error())
+		status.Errorf(codes.Internal, "unexpected error adding order: %s", err.Error())
 		return &api.Order{
 			Success:    false,
 			ErrCode:    "INTERNAL_ERROR",
@@ -55,7 +56,10 @@ func (d Directory) AddOrder(ctx context.Context, req *api.OrderRequest) (*api.Or
 		}, nil
 	}
 
-	return orderPostgresToProto(pgOrder)
+	return &api.Order{
+		Success: true,
+		ErrCode: "NONE",
+	}, nil
 }
 
 // ListOrders lists orders in the directory, subject to the request filters.

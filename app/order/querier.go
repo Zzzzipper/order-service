@@ -7,7 +7,7 @@ import (
 )
 
 type Querier interface {
-	AddOrder(ctx context.Context, arg AddOrderParams) (Order, error)
+	AddOrder(ctx context.Context, arg AddOrderParams) error
 	DeleteOrder(ctx context.Context, arg DeleteOrderParams) (Order, error)
 	GetOrder(ctx context.Context, arg GetOrderParams) (GetOrderRow, error)
 	UpdateOrder(ctx context.Context, arg UpdateOrderParams) (Order, error)

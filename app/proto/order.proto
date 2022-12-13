@@ -4,7 +4,6 @@ package app.proto;
 
 import "payment/api/init_types.proto";
 
-
 option go_package = "gitlab.mapcard.pro/external-map-team/order-service/app/proto;proto";
 
 service OrderService {
