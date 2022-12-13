@@ -3,6 +3,7 @@ package order
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/jackc/pgtype"
@@ -15,6 +16,7 @@ import (
 
 // AddOrder adds a order to the directory.
 func (d Directory) AddOrder(ctx context.Context, req *api.OrderRequest) (*api.Order, error) {
+	fmt.Println("Start AddOrder..")
 	orderRequest, err := json.Marshal(*req)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "error marshalling order request: %s", err.Error())
@@ -43,6 +45,7 @@ func (d Directory) AddOrder(ctx context.Context, req *api.OrderRequest) (*api.Or
 		OrderID:      req.MerchantOrderId,
 		SellerID:     req.Key,
 	})
+
 	if err != nil {
 		status.Errorf(codes.Internal, "unexpected error adding partner: %s", err.Error())
 		return &api.Order{
@@ -51,6 +54,7 @@ func (d Directory) AddOrder(ctx context.Context, req *api.OrderRequest) (*api.Or
 			ErrMessage: err.Error(),
 		}, nil
 	}
+
 	return orderPostgresToProto(pgOrder)
 }
 
