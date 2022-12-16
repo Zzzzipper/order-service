@@ -37,7 +37,7 @@ func (d Directory) AddOrder(ctx context.Context, req *api.OrderRequest) (*api.Or
 		}, nil
 	}
 
-	_, err = d.querier.AddOrder(ctx, AddOrderParams{
+	pgOrder, err := d.querier.AddOrder(ctx, AddOrderParams{
 		OrderRequest: json.RawMessage(orderRequest),
 		Rrn:          "{}",
 		OrderID:      req.MerchantOrderId,
@@ -55,10 +55,7 @@ func (d Directory) AddOrder(ctx context.Context, req *api.OrderRequest) (*api.Or
 		}, nil
 	}
 
-	return &api.Order{
-		Success: true,
-		ErrCode: "NONE",
-	}, nil
+	return orderPostgresToProto(pgOrder)
 }
 
 // ListOrders lists orders in the directory, subject to the request filters.
