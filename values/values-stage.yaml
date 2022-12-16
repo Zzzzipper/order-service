@@ -109,13 +109,13 @@ affinity: {}
 
 envConfig:
   API_SECRET: "98hbun98h"
-  PORT: "8080"
-  DB_HOST: "10.20.0.100"
-  DB_DRIVER: "postgres"
-  DB_USER: "orders_user"
-  DB_PASSWORD: "gkLks6AABKcIrivF"
-  DB_NAME: "orders"
-  DB_PORT: "5432"
+  # PORT: "8080"
+  # DB_HOST: "10.20.0.100"
+  # DB_DRIVER: "postgres"
+  # DB_USER: "orders_user"
+  # DB_PASSWORD: "gkLks6AABKcIrivF"
+  # DB_NAME: "orders"
+  # DB_PORT: "5432"
   LOGBUFF_URL: "http://payments-api:9000/api/v1/log"
   LOG_SOURCE: "ORDER"
 
