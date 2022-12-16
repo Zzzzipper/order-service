@@ -3,12 +3,10 @@ package order
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/jackc/pgtype"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 
 	"gitlab.mapcard.pro/external-map-team/api-proto/payment/api"
 	orderpb "gitlab.mapcard.pro/external-map-team/order-service/app/proto"
@@ -16,10 +14,11 @@ import (
 
 // AddOrder adds a order to the directory.
 func (d Directory) AddOrder(ctx context.Context, req *api.OrderRequest) (*api.Order, error) {
-	fmt.Println("Start AddOrder..")
+	Log().Line("Start AddOrder..")
+
 	orderRequest, err := json.Marshal(*req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "error marshalling order request: %s", err.Error())
+		return nil, Log().StatusErrorf(codes.Internal, "Error marshalling order request: %s", err.Error())
 	}
 
 	if req.MerchantOrderId == "" {
@@ -47,7 +46,7 @@ func (d Directory) AddOrder(ctx context.Context, req *api.OrderRequest) (*api.Or
 	})
 
 	if err != nil {
-		status.Errorf(codes.Internal, "unexpected error adding partner: %s", err.Error())
+		Log().StatusErrorf(codes.Internal, "Unexpected error adding partner: %s", err.Error())
 		return &api.Order{
 			Success:    false,
 			ErrCode:    "INTERNAL_ERROR",
@@ -75,7 +74,7 @@ func (d Directory) ListOrders(req *api.ListOrdersRequest, srv orderpb.OrderServi
 		var pgTime pgtype.Timestamptz
 		err := pgTime.Set(req.GetCreatedSince().AsTime())
 		if err != nil {
-			return status.Errorf(codes.InvalidArgument, "invalid timestamp: %s", err.Error())
+			return Log().StatusErrorf(codes.InvalidArgument, "Invalid timestamp: %s", err.Error())
 		}
 		q = q.Where(squirrel.Gt{
 			"create_time": pgTime,
@@ -86,7 +85,7 @@ func (d Directory) ListOrders(req *api.ListOrdersRequest, srv orderpb.OrderServi
 		var pgInterval pgtype.Interval
 		err := pgInterval.Set(req.GetOlderThan().AsDuration())
 		if err != nil {
-			return status.Errorf(codes.InvalidArgument, "invalid duration: %s", err.Error())
+			return Log().StatusErrorf(codes.InvalidArgument, "Invalid duration: %s", err.Error())
 		}
 		q = q.Where(
 			squirrel.Expr(
@@ -97,12 +96,12 @@ func (d Directory) ListOrders(req *api.ListOrdersRequest, srv orderpb.OrderServi
 
 	rows, retErr := q.QueryContext(srv.Context())
 	if retErr != nil {
-		return status.Error(codes.Internal, retErr.Error())
+		return Log().StatusError(codes.Internal, retErr.Error())
 	}
 	defer func() {
 		cerr := rows.Close()
 		if retErr == nil && cerr != nil {
-			retErr = status.Error(codes.Internal, cerr.Error())
+			retErr = Log().StatusError(codes.Internal, cerr.Error())
 		}
 	}()
 
@@ -117,7 +116,7 @@ func (d Directory) ListOrders(req *api.ListOrdersRequest, srv orderpb.OrderServi
 			&pgOrder.SellerID,
 		)
 		if err != nil {
-			return status.Error(codes.Internal, err.Error())
+			return Log().StatusError(codes.Internal, err.Error())
 		}
 		protoPartner, err := orderPostgresToProto(pgOrder)
 		if err != nil {
@@ -125,13 +124,13 @@ func (d Directory) ListOrders(req *api.ListOrdersRequest, srv orderpb.OrderServi
 		}
 		err = srv.Send(protoPartner)
 		if err != nil {
-			return status.Error(codes.Internal, err.Error())
+			return Log().StatusError(codes.Internal, err.Error())
 		}
 	}
 
 	retErr = rows.Err()
 	if retErr != nil {
-		return status.Error(codes.Internal, retErr.Error())
+		return Log().StatusError(codes.Internal, retErr.Error())
 	}
 
 	return nil

@@ -12,7 +12,6 @@ import (
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	"github.com/golang-migrate/migrate/v4/source/iofs"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 
 	"gitlab.mapcard.pro/external-map-team/api-proto/payment/api"
 )
@@ -54,12 +53,12 @@ func validateSchema(db *sql.DB, scheme string) error {
 func orderPostgresToProto(pgOrder Order) (*api.Order, error) {
 	bytes, err := pgOrder.OrderRequest.MarshalJSON()
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "failed to marshallling order request: %s", err.Error())
+		return nil, Log().StatusErrorf(codes.Internal, "Failed to marshallling order request: %v", err)
 	}
 	var orderRequest api.OrderRequest
 	err = json.Unmarshal(bytes, &orderRequest)
 	if err != nil {
-		status.Errorf(codes.Internal, "failed to unmarshallling order request: %s", err.Error())
+		return nil, Log().StatusErrorf(codes.Internal, "Failed to unmarshallling order request: %v", err)
 	}
 	return &api.Order{
 		Success:      true,
@@ -76,7 +75,7 @@ func orderRawPostgresToProto(pgOrderRaw GetOrderRow) (*api.Order, error) {
 	var orderRequest api.OrderRequest
 	err := json.Unmarshal(pgOrderRaw.OrderRequest, &orderRequest)
 	if err != nil {
-		status.Errorf(codes.Internal, "failed to unmarshallling order request: %s", err.Error())
+		return nil, Log().StatusErrorf(codes.Internal, "Failed to unmarshallling order request: %v", err)
 	}
 
 	return &api.Order{
