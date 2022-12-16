@@ -37,8 +37,7 @@ func (d Directory) AddOrder(ctx context.Context, req *api.OrderRequest) (*api.Or
 		}, nil
 	}
 
-	var pgOrder Order
-	pgOrder, err = d.querier.AddOrder(ctx, AddOrderParams{
+	pgOrder, err := d.querier.AddOrder(ctx, AddOrderParams{
 		OrderRequest: json.RawMessage(orderRequest),
 		Rrn:          "{}",
 		OrderID:      req.MerchantOrderId,

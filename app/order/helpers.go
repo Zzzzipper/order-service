@@ -34,7 +34,7 @@ func validateSchema(db *sql.DB, scheme string) error {
 	case "postgres", "postgresql":
 		driverInstance, err = postgres.WithInstance(db, new(postgres.Config))
 	default:
-		return fmt.Errorf("unknown scheme: %q", scheme)
+		return Log().Errorf("Unknown scheme: %q", scheme)
 	}
 	if err != nil {
 		return err
@@ -96,7 +96,7 @@ func CreateURL_FromEnvParts() (string, error) {
 	var pgUrl string = ""
 	pgHost := os.Getenv("DB_HOST")
 	if pgHost == "" {
-		return "", fmt.Errorf("Postgres host must be set")
+		return "", Log().Errorf("Postgres host must be set")
 	}
 	pgDriver := os.Getenv("DB_DRIVER")
 	if pgDriver == "" {
@@ -104,15 +104,15 @@ func CreateURL_FromEnvParts() (string, error) {
 	}
 	pgUser := os.Getenv("DB_USER")
 	if pgUser == "" {
-		return "", fmt.Errorf("Postgres user must be set")
+		return "", Log().Errorf("Postgres user must be set")
 	}
 	pgPassword := os.Getenv("DB_PASSWORD")
 	if pgPassword == "" {
-		return "", fmt.Errorf("Postgres password must be set")
+		return "", Log().Errorf("Postgres password must be set")
 	}
 	pgDbName := os.Getenv("DB_NAME")
 	if pgDbName == "" {
-		return "", fmt.Errorf("Postgres database name must be set")
+		return "", Log().Errorf("Postgres database name must be set")
 	}
 	pgPort := os.Getenv("DB_PORT")
 	if pgPort == "" {
