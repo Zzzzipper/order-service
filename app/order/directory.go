@@ -2,7 +2,6 @@ package order
 
 import (
 	"database/sql"
-	"fmt"
 	"net/url"
 
 	"github.com/Masterminds/squirrel"
@@ -25,7 +24,7 @@ type Directory struct {
 func NewDirectory(logger *logrus.Logger, pgURL *url.URL) (*Directory, error) {
 	c, err := pgx.ParseConfig(pgURL.String())
 	if err != nil {
-		return nil, fmt.Errorf("parsing orders URI: %w", err)
+		return nil, Log().Errorf("Parsing orders URI: %w", err)
 	}
 
 	c.Logger = logrusadapter.NewLogger(logger)
@@ -33,7 +32,7 @@ func NewDirectory(logger *logrus.Logger, pgURL *url.URL) (*Directory, error) {
 
 	err = validateSchema(db, pgURL.Scheme)
 	if err != nil {
-		return nil, fmt.Errorf("validating schema: %w", err)
+		return nil, Log().Errorf("validating schema: %w", err)
 	}
 
 	return &Directory{
