@@ -1,0 +1,82 @@
+syntax="proto3";
+
+package payment.api;
+
+import "google/protobuf/duration.proto";
+import "payment/api/api_types.proto";
+import "google/protobuf/struct.proto";
+
+option go_package = "gitlab.mapcard.pro/external-map-team/api-proto/payment/api;api";
+
+enum PayType {
+    CARD    = 0;
+    APPLE   = 1;
+    GOOGLE  = 2;
+    SAMSUNG = 3;
+    IPS     = 4;
+    YANDEX  = 5;
+}
+  
+
+message OrderRequest {
+    // Идентификатор платежа в системе Продавца
+    string merchant_order_id = 1;
+    
+    // Код валюты ISO 4217
+    string currency = 2;
+    
+    // Тип оплаты: CARD, APPLE, GOOGLE, SAMSUNG, IPS
+    PayType payment_type = 3;
+    
+    // Сумма блокировки в минимальных единицах валюты (копейках)
+    uint32 amount = 4; 
+    
+    // Срок действия сессии (в секундах), по истечении которого оплата по данной сессии будет невозможна. 
+    // Если не передан, время жизни сессии устанавливается равным одной неделе
+    google.protobuf.Duration lifetime = 5; 
+    
+    // Список наименований товаров/услуг для отправки в ОФД (54-ФЗ). 
+    // Общая сумма всех товаров должна соответствовать amount.
+    repeated Item items = 6;
+    
+    // Идентификация покупателя
+    Buyer buyer = 7;
+
+    // Дополнительные данные пользователя
+    google.protobuf.Struct user_data = 8;
+
+    // Индекс магазина
+    uint64 shop_id = 9; 
+
+    // Индекс мерчанта
+    uint64 merchant_id = 10;
+
+    // Индекс партнера
+    uint64 partner_id = 11;
+
+}
+
+message Order {
+    // Индекс заказа в системе продавца
+    string MerchantOrderId = 1;
+
+    // Код валюты ISO 4217
+    string Currency = 2;
+
+    // Сумма резервирования
+    uint32 Amount = 3;
+
+    // Тип оплаты: CARD, APPLE, GOOGLE, SAMSUNG, IPS
+    PayType PaymentType = 4;
+
+    // Список наименований товаров/услуг для отправки в ОФД (54-ФЗ). 
+    // Общая сумма всех товаров должна соответствовать amount.
+    repeated Item Items = 5;
+
+    // Идентификация покупателя
+    Buyer Buyer = 6;
+
+    // Индекс заказа в order-service
+    uint64 OrderId = 7;
+}
+

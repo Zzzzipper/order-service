@@ -1,0 +1,49 @@
+syntax="proto3";
+
+package payment.api;
+
+option go_package = "gitlab.mapcard.pro/external-map-team/api-proto/payment/api;api";
+
+message Card {
+  // Номер карты
+  string pan = 1;
+
+  // Месяц истечения срока действия карты
+  uint32 emonth = 2;
+
+  // Год истечения срока действия карты
+  uint32 eyear = 3;	
+
+  // CVC2/CVV2. Параметр является опциональным
+  string cvv = 4;	
+
+  // Фамилия и имя держателя карты
+  string holder = 5;	
+
+  // Идентификатор карты в системе theMAP или значение «Random». 
+  // При указании значения «Random» выбирается случайная карта из привязанных к данному пользователю
+  string uid = 6;	
+}
+
+message BlockRequest {
+  // Параметры карты
+  Card card = 1;
+
+  // Индекс заказа в order-service
+  uint64 order_id = 2;
+}
+
+message Block {
+  // RRN(Reference Retrieval Number) операции.
+  // Уникальный идентификатор банковской транзакции, который назначается банком-эквайрером при проведении платежа.
+  string Rrn = 1;
+
+  // Индекс заказа в order-service
+  uint64 OrderId = 2;
+
+  // URL службы подтвердждения
+  string AcsUrl = 3;	
+
+  // Запрос на оплату
+  string Pareq = 4;
+}
