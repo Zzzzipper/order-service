@@ -20,14 +20,14 @@ import (
 
 type Server struct {
 	proto.UnimplementedOrderServiceServer
-	logger       *logger.Logger
-	orderUseCase *usecase.OrderUseCase
+	logger *logger.Logger
+	order  usecase.Order
 }
 
-func NewServer(logger *logger.Logger, orderUseCase *usecase.OrderUseCase) *Server {
+func NewServer(logger *logger.Logger, order usecase.Order) *Server {
 	return &Server{
-		logger:       logger,
-		orderUseCase: orderUseCase,
+		logger: logger,
+		order:  order,
 	}
 }
 
@@ -95,7 +95,7 @@ func (s *Server) AddOrder(ctx context.Context, req *api.OrderRequest) (*api.Orde
 		PartnerId:       int64(req.PartnerId),
 	}
 
-	err = s.orderUseCase.AddOrder(ctx, order)
+	newId, err := s.order.AddOrder(ctx, order)
 
 	if err != nil {
 		return nil, err
@@ -122,7 +122,7 @@ func (s *Server) AddOrder(ctx context.Context, req *api.OrderRequest) (*api.Orde
 		PaymentType:     api.PayType(order.PaymentType),
 		Items:           items,
 		Buyer:           &buyer,
-		OrderId:         order.ID,
+		OrderId:         newId,
 	}
 
 	return &response, nil

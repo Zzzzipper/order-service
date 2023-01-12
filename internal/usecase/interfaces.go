@@ -8,10 +8,10 @@ import (
 
 type (
 	Order interface {
-		AddOrder(ctx context.Context, req *entity.OrderCreator) error
+		AddOrder(ctx context.Context, req *entity.OrderCreator) (uint64, error)
 	}
 
 	OrderRepo interface {
-		StoreOrder(ctx context.Context, req *entity.OrderCreator) error
+		StoreOrder(ctx context.Context, req *entity.OrderCreator) (uint64, error)
 	}
 )

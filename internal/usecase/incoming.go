@@ -21,7 +21,7 @@ func New(logger *logger.Logger, r OrderRepo) *OrderUseCase {
 	}
 }
 
-func (u *OrderUseCase) AddOrder(ctx context.Context, order *entity.OrderCreator) error {
+func (u *OrderUseCase) AddOrder(ctx context.Context, order *entity.OrderCreator) (uint64, error) {
 	beginTime := time.Now()
 
 	defer func() {
@@ -29,11 +29,11 @@ func (u *OrderUseCase) AddOrder(ctx context.Context, order *entity.OrderCreator)
 		u.logger.Infof("AddOrder time %d", int(time.Since(beginTime).Milliseconds()))
 	}()
 
-	err := u.repo.StoreOrder(ctx, order)
+	id, err := u.repo.StoreOrder(ctx, order)
 
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	return nil
+	return id, nil
 }

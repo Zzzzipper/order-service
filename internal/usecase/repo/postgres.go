@@ -21,7 +21,7 @@ func New(pg *postgres.Postgres, l *logger.Logger) *OrderRepo {
 	return &OrderRepo{pg, l}
 }
 
-func (r *OrderRepo) StoreOrder(ctx context.Context, req *entity.OrderCreator) error {
+func (r *OrderRepo) StoreOrder(ctx context.Context, req *entity.OrderCreator) (uint64, error) {
 	beginTime := time.Now()
 
 	defer func() {
@@ -31,11 +31,12 @@ func (r *OrderRepo) StoreOrder(ctx context.Context, req *entity.OrderCreator) er
 
 	result := r.DB.Table("order").Create(&req)
 
-	r.DB.Table("order").Save(req)
+	idCatcher := entity.OrderCreator{}
+	r.DB.Table("order").Save(&idCatcher)
 
 	if result.Error != nil {
-		return fmt.Errorf("OrderRepo - StoreOrder - error: %w", result.Error)
+		return 0, fmt.Errorf("OrderRepo - StoreOrder - error: %w", result.Error)
 	}
 
-	return nil
+	return idCatcher.ID, nil
 }
