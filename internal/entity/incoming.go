@@ -5,7 +5,7 @@ import (
 )
 
 type (
-	OrderCreator struct {
+	Order struct {
 		ID              uint64        `json:"id" gorm:"id"`
 		MerchantOrderId string        `json:"merchant_order_id" binding:"required" gorm:"merchant_order_id"`
 		Currency        string        `json:"currency" binding:"required" gorm:"currency"`

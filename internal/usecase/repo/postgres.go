@@ -7,6 +7,7 @@ import (
 
 	"gitlab.mapcard.pro/external-map-team/order-service/pkg/logger"
 	"gitlab.mapcard.pro/external-map-team/order-service/pkg/metrics"
+	"gorm.io/gorm"
 
 	"gitlab.mapcard.pro/external-map-team/order-service/internal/entity"
 	"gitlab.mapcard.pro/external-map-team/order-service/pkg/postgres"
@@ -21,7 +22,7 @@ func New(pg *postgres.Postgres, l *logger.Logger) *OrderRepo {
 	return &OrderRepo{pg, l}
 }
 
-func (r *OrderRepo) StoreOrder(ctx context.Context, req *entity.OrderCreator) (uint64, error) {
+func (r *OrderRepo) StoreOrder(ctx context.Context, req *entity.Order) (uint64, error) {
 	beginTime := time.Now()
 
 	defer func() {
@@ -29,14 +30,13 @@ func (r *OrderRepo) StoreOrder(ctx context.Context, req *entity.OrderCreator) (u
 		r.l.Infof("StoreOrder time %d", int(time.Since(beginTime).Milliseconds()))
 	}()
 
-	result := r.DB.Table("order").Create(&req)
+	err := r.DB.Table("order").Transaction(func(tx *gorm.DB) error {
+		return r.DB.Table("order").Create(&req).Error
+	})
 
-	idCatcher := entity.OrderCreator{}
-	r.DB.Table("order").Save(&idCatcher)
-
-	if result.Error != nil {
-		return 0, fmt.Errorf("OrderRepo - StoreOrder - error: %w", result.Error)
+	if err != nil {
+		return 0, fmt.Errorf("OrderRepo - StoreOrder - error: %w", err)
 	}
 
-	return idCatcher.ID, nil
+	return req.ID, nil
 }

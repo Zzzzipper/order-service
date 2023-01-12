@@ -81,7 +81,7 @@ func (s *Server) AddOrder(ctx context.Context, req *api.OrderRequest) (*api.Orde
 		return nil, err
 	}
 
-	order := &entity.OrderCreator{
+	order := &entity.Order{
 		MerchantOrderId: req.MerchantOrderId,
 		Currency:        req.Currency,
 		PaymentType:     int32(req.PaymentType),

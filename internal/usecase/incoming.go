@@ -21,7 +21,7 @@ func New(logger *logger.Logger, r OrderRepo) *OrderUseCase {
 	}
 }
 
-func (u *OrderUseCase) AddOrder(ctx context.Context, order *entity.OrderCreator) (uint64, error) {
+func (u *OrderUseCase) AddOrder(ctx context.Context, order *entity.Order) (uint64, error) {
 	beginTime := time.Now()
 
 	defer func() {
