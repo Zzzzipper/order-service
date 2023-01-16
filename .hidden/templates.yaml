@@ -74,8 +74,8 @@
   image: docker:19.03.8
   only:
     changes:
-      - "app/*"
-      - "app/**/*"
+      - "*"
+      - "**/*"
   services:
     - docker:18.09-dind
   stage: build
