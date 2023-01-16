@@ -8,9 +8,8 @@ require (
 	github.com/prometheus/client_golang v1.7.1
 	github.com/rs/zerolog v1.15.0
 	github.com/spf13/viper v1.14.0
-	gitlab.mapcard.pro/external-map-team/api-proto v1.0.73
+	gitlab.mapcard.pro/external-map-team/api-proto v1.0.75
 	google.golang.org/grpc v1.50.1
-	google.golang.org/protobuf v1.28.1
 	gorm.io/driver/postgres v1.0.8
 	gorm.io/gorm v1.21.4
 )
@@ -57,6 +56,7 @@ require (
 	github.com/subosito/gotenv v1.4.1 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	google.golang.org/genproto v0.0.0-20221114212237-e4508ebdbee1 // indirect
+	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

@@ -154,8 +154,9 @@ github.com/spf13/viper/internal/encoding/yaml
 # github.com/subosito/gotenv v1.4.1
 ## explicit; go 1.18
 github.com/subosito/gotenv
-# gitlab.mapcard.pro/external-map-team/api-proto v1.0.73
-## explicit; go 1.16
+# gitlab.mapcard.pro/external-map-team/api-proto v1.0.75
+## explicit; go 1.18
+gitlab.mapcard.pro/external-map-team/api-proto/order/api
 gitlab.mapcard.pro/external-map-team/api-proto/payment/api
 # go.uber.org/atomic v1.9.0
 ## explicit; go 1.13

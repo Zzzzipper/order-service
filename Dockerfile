@@ -1,22 +1,20 @@
-# Build stage
-FROM golang AS build-env
-
-ADD ./app /src/order-service/app
-ADD ./go.mod /src/order-service
-ADD ./go.sum /src/order-service
+FROM golang:1.17.1-alpine3.14 as builder
+WORKDIR /app
+COPY . .
 
 ENV CGO_ENABLED=0
 
-ARG API_PROTO_DEPENDENCIES_TOKEN
+RUN GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -mod=vendor -o ./main ./cmd/app/main.go
+RUN GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -mod=vendor -o ./migrate ./cmd/migrations/migrate.go
 
-RUN git config --global url."https://oauth2:${API_PROTO_DEPENDENCIES_TOKEN}@gitlab.mapcard.pro/external-map-team/api-proto".insteadOf https://gitlab.mapcard.pro/external-map-team/api-proto
-RUN go env -w GOPRIVATE=gitlab.mapcard.pro/external-map-team/*
+FROM alpine:3.14 as example-template
 
-RUN cd /src/order-service && go build -o /app ./app/cmd/main.go
+COPY --from=builder /app/main    /app/main
+COPY --from=builder /app/migrate /app/migrate
+COPY entrypoint.sh /app/entrypoint.sh
+COPY .env /.env
+COPY migrations /migrations
+RUN chmod +x /app/entrypoint.sh
+EXPOSE 8080
 
-# Production stage
-FROM scratch
-
-COPY --from=build-env /app /
-
-ENTRYPOINT ["/app"]
+CMD ["/app/entrypoint.sh"]

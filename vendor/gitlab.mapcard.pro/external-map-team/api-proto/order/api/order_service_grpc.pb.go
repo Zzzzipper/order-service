@@ -2,13 +2,12 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.6.1
-// source: proto/order.proto
+// source: order/api/order_service.proto
 
-package proto
+package api
 
 import (
 	context "context"
-	api "gitlab.mapcard.pro/external-map-team/api-proto/payment/api"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -23,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OrderServiceClient interface {
-	AddOrder(ctx context.Context, in *api.OrderRequest, opts ...grpc.CallOption) (*api.Order, error)
+	AddOrder(ctx context.Context, in *OrderRequest, opts ...grpc.CallOption) (*Order, error)
 }
 
 type orderServiceClient struct {
@@ -34,9 +33,9 @@ func NewOrderServiceClient(cc grpc.ClientConnInterface) OrderServiceClient {
 	return &orderServiceClient{cc}
 }
 
-func (c *orderServiceClient) AddOrder(ctx context.Context, in *api.OrderRequest, opts ...grpc.CallOption) (*api.Order, error) {
-	out := new(api.Order)
-	err := c.cc.Invoke(ctx, "/app.proto.OrderService/AddOrder", in, out, opts...)
+func (c *orderServiceClient) AddOrder(ctx context.Context, in *OrderRequest, opts ...grpc.CallOption) (*Order, error) {
+	out := new(Order)
+	err := c.cc.Invoke(ctx, "/order.api.OrderService/AddOrder", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -44,19 +43,21 @@ func (c *orderServiceClient) AddOrder(ctx context.Context, in *api.OrderRequest,
 }
 
 // OrderServiceServer is the server API for OrderService service.
-// All implementations should embed UnimplementedOrderServiceServer
+// All implementations must embed UnimplementedOrderServiceServer
 // for forward compatibility
 type OrderServiceServer interface {
-	AddOrder(context.Context, *api.OrderRequest) (*api.Order, error)
+	AddOrder(context.Context, *OrderRequest) (*Order, error)
+	mustEmbedUnimplementedOrderServiceServer()
 }
 
-// UnimplementedOrderServiceServer should be embedded to have forward compatible implementations.
+// UnimplementedOrderServiceServer must be embedded to have forward compatible implementations.
 type UnimplementedOrderServiceServer struct {
 }
 
-func (UnimplementedOrderServiceServer) AddOrder(context.Context, *api.OrderRequest) (*api.Order, error) {
+func (UnimplementedOrderServiceServer) AddOrder(context.Context, *OrderRequest) (*Order, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddOrder not implemented")
 }
+func (UnimplementedOrderServiceServer) mustEmbedUnimplementedOrderServiceServer() {}
 
 // UnsafeOrderServiceServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to OrderServiceServer will
@@ -70,7 +71,7 @@ func RegisterOrderServiceServer(s grpc.ServiceRegistrar, srv OrderServiceServer)
 }
 
 func _OrderService_AddOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(api.OrderRequest)
+	in := new(OrderRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -79,10 +80,10 @@ func _OrderService_AddOrder_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/app.proto.OrderService/AddOrder",
+		FullMethod: "/order.api.OrderService/AddOrder",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrderServiceServer).AddOrder(ctx, req.(*api.OrderRequest))
+		return srv.(OrderServiceServer).AddOrder(ctx, req.(*OrderRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -91,7 +92,7 @@ func _OrderService_AddOrder_Handler(srv interface{}, ctx context.Context, dec fu
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var OrderService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "app.proto.OrderService",
+	ServiceName: "order.api.OrderService",
 	HandlerType: (*OrderServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -100,5 +101,5 @@ var OrderService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/order.proto",
+	Metadata: "order/api/order_service.proto",
 }

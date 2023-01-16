@@ -7,19 +7,19 @@ import (
 	"net"
 	"time"
 
-	"gitlab.mapcard.pro/external-map-team/api-proto/payment/api"
+	order_api "gitlab.mapcard.pro/external-map-team/api-proto/order/api"
+	payment_api "gitlab.mapcard.pro/external-map-team/api-proto/payment/api"
 	"gitlab.mapcard.pro/external-map-team/order-service/internal/entity"
 	"gitlab.mapcard.pro/external-map-team/order-service/internal/usecase"
 	"gitlab.mapcard.pro/external-map-team/order-service/pkg/logger"
 	"gitlab.mapcard.pro/external-map-team/order-service/pkg/metrics"
-	"gitlab.mapcard.pro/external-map-team/order-service/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
 	"google.golang.org/grpc/health/grpc_health_v1"
 )
 
 type Server struct {
-	proto.UnimplementedOrderServiceServer
+	order_api.UnimplementedOrderServiceServer
 	logger *logger.Logger
 	order  usecase.Order
 }
@@ -45,7 +45,7 @@ func (s *Server) Start(port string) error {
 
 	grpcServer := grpc.NewServer(opts...)
 
-	proto.RegisterOrderServiceServer(grpcServer, s)
+	order_api.RegisterOrderServiceServer(grpcServer, s)
 
 	grpc_health_v1.RegisterHealthServer(grpcServer, health.NewServer())
 
@@ -56,7 +56,7 @@ func (s *Server) Start(port string) error {
 	return nil
 }
 
-func (s *Server) AddOrder(ctx context.Context, req *api.OrderRequest) (*api.Order, error) {
+func (s *Server) AddOrder(ctx context.Context, req *order_api.OrderRequest) (*order_api.Order, error) {
 	beginTime := time.Now()
 
 	defer func() {
@@ -101,25 +101,25 @@ func (s *Server) AddOrder(ctx context.Context, req *api.OrderRequest) (*api.Orde
 		return nil, err
 	}
 
-	var items []*api.Item
+	var items []*payment_api.Item
 	err = json.Unmarshal([]byte(order.Items), &items)
 
 	if err != nil {
 		return nil, err
 	}
 
-	var buyer api.Buyer
+	var buyer payment_api.Buyer
 	err = json.Unmarshal([]byte(order.Buyer), &buyer)
 
 	if err != nil {
 		return nil, err
 	}
 
-	response := api.Order{
+	response := order_api.Order{
 		MerchantOrderId: order.MerchantOrderId,
 		Currency:        order.Currency,
 		Amount:          uint32(order.Amount),
-		PaymentType:     api.PayType(order.PaymentType),
+		PaymentType:     order_api.PayType(order.PaymentType),
 		Items:           items,
 		Buyer:           &buyer,
 		OrderId:         newId,

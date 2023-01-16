@@ -478,7 +478,6 @@ github.com/google/go-cmp v0.5.4/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/
 github.com/google/go-cmp v0.5.5/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/google/go-cmp v0.5.6/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/google/go-cmp v0.5.9 h1:O2Tfq5qg4qc4AmwVlvv0oLiVAGB7enBSJ2x2DqQFi38=
-github.com/google/go-cmp v0.5.9/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 github.com/google/go-github/v35 v35.2.0/go.mod h1:s0515YVTI+IMrDoy9Y4pHt9ShGpzHvHO8rZ7L7acgvs=
 github.com/google/go-querystring v1.0.0/go.mod h1:odCYkC5MyYFN7vkCjXpyrEuKhc/BUO6wN/zVPAxq5ck=
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
@@ -958,16 +957,8 @@ github.com/yvasiyarov/gorelic v0.0.0-20141212073537-a9bba5b9ab50/go.mod h1:NUSPS
 github.com/yvasiyarov/newrelic_platform_go v0.0.0-20140908184405-b21fdbd4370f/go.mod h1:GlGEuHIJweS1mbCqG+7vt2nvWLzLLnRHbXz5JKd/Qbg=
 github.com/zenazn/goji v0.9.0/go.mod h1:7S9M489iMyHBNxwZnk9/EHS098H4/F6TATF2mIxtB1Q=
 gitlab.com/nyarla/go-crypt v0.0.0-20160106005555-d9a5dc2b789b/go.mod h1:T3BPAOm2cqquPa0MKWeNkmOM5RQsRhkrwMWonFMN7fE=
-gitlab.mapcard.pro/external-map-team/api-proto v1.0.69 h1:M+XNRF/lumhfnpWlh2ciKwmsJqOI98/2UOvDDUQpflQ=
-gitlab.mapcard.pro/external-map-team/api-proto v1.0.69/go.mod h1:WSvna0B0iH0Z+qtFxwVsgF/kWGG4UslrVm0DMoHzhSI=
-gitlab.mapcard.pro/external-map-team/api-proto v1.0.70 h1:4om6FDiWYWBvNxu76Ixp9Tj4zKCmdR2Su7Zv2PUfbA4=
-gitlab.mapcard.pro/external-map-team/api-proto v1.0.70/go.mod h1:WSvna0B0iH0Z+qtFxwVsgF/kWGG4UslrVm0DMoHzhSI=
-gitlab.mapcard.pro/external-map-team/api-proto v1.0.71 h1:6Qaa1tBlJtShcByKzUd8X+01m5tVCdNdTLK/lmQfPGI=
-gitlab.mapcard.pro/external-map-team/api-proto v1.0.71/go.mod h1:WSvna0B0iH0Z+qtFxwVsgF/kWGG4UslrVm0DMoHzhSI=
-gitlab.mapcard.pro/external-map-team/api-proto v1.0.72 h1:F2YlofIdAXiWz0ypTVfpJrkS9JjGrxjKWJNBoqpNFmY=
-gitlab.mapcard.pro/external-map-team/api-proto v1.0.72/go.mod h1:WSvna0B0iH0Z+qtFxwVsgF/kWGG4UslrVm0DMoHzhSI=
-gitlab.mapcard.pro/external-map-team/api-proto v1.0.73 h1:MAKCzbaYM98SdZInUfU8jgMU/7u5o6Nvgi766md8l3I=
-gitlab.mapcard.pro/external-map-team/api-proto v1.0.73/go.mod h1:WSvna0B0iH0Z+qtFxwVsgF/kWGG4UslrVm0DMoHzhSI=
+gitlab.mapcard.pro/external-map-team/api-proto v1.0.75 h1:F3SXNMS6MDAjSjxePgHkcSV9VOH9Ae/sB+mTe5RzpQ8=
+gitlab.mapcard.pro/external-map-team/api-proto v1.0.75/go.mod h1:4gspH72ztnrCWeAgTPOHHx21D4DNkjV3MdLnVxYUY1A=
 go.etcd.io/bbolt v1.3.2/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.etcd.io/bbolt v1.3.3/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.etcd.io/bbolt v1.3.5/go.mod h1:G5EMThwa9y8QZGBClrRx5EY+Yw9kAhnjy3bSjsnlVTQ=

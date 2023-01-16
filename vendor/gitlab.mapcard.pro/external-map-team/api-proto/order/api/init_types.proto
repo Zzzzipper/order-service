@@ -1,12 +1,13 @@
 syntax="proto3";
 
-package payment.api;
+package order.api;
 
 import "google/protobuf/duration.proto";
-import "payment/api/api_types.proto";
 import "google/protobuf/struct.proto";
 
-option go_package = "gitlab.mapcard.pro/external-map-team/api-proto/payment/api;api";
+import "payment/api/base_types.proto";
+
+option go_package = "gitlab.mapcard.pro/external-map-team/api-proto/order/api;api";
 
 enum PayType {
     CARD    = 0;
@@ -37,10 +38,10 @@ message OrderRequest {
     
     // Список наименований товаров/услуг для отправки в ОФД (54-ФЗ). 
     // Общая сумма всех товаров должна соответствовать amount.
-    repeated Item items = 6;
+    repeated payment.api.Item items = 6;
     
     // Идентификация покупателя
-    Buyer buyer = 7;
+    payment.api.Buyer buyer = 7;
 
     // Дополнительные данные пользователя
     google.protobuf.Struct user_data = 8;
@@ -71,10 +72,10 @@ message Order {
 
     // Список наименований товаров/услуг для отправки в ОФД (54-ФЗ). 
     // Общая сумма всех товаров должна соответствовать amount.
-    repeated Item Items = 5;
+    repeated payment.api.Item Items = 5;
 
     // Идентификация покупателя
-    Buyer Buyer = 6;
+    payment.api.Buyer Buyer = 6;
 
     // Индекс заказа в order-service
     uint64 OrderId = 7;

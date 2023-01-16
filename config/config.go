@@ -22,6 +22,7 @@ type (
 )
 
 func NewConfig() (*Config, error) {
+
 	cfg := Config{}
 
 	viper.AddConfigPath(".")
