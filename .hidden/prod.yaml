@@ -1,23 +1,23 @@
-build-prod-image-api-bo:
+build-prod-image:
   extends:
     - .prod
     - .build_image
 
 # Deploy
-deploy-prod-api-bo-sha:
+deploy-prod-sha:
   only:
     changes:
-      - "app/*"
-      - "app/**/*"
+      - "*"
+      - "**/*"
   extends:
     - .deploy-prod
     - .deploy-sha
 
-deploy-prod-api-bo-latest:
-  except:
-    changes:
-      - "app/*"
-      - "app/**/*"
-  extends:
-    - .deploy-prod
-    - .deploy-latest
+# deploy-prod-api-bo-latest:
+#   except:
+#     changes:
+#       - "app/*"
+#       - "app/**/*"
+#   extends:
+#     - .deploy-prod
+#     - .deploy-latest
