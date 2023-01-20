@@ -19,7 +19,31 @@ enum PayType {
 }
   
 
-message OrderRequest {
+message Order {
+    // Индекс заказа в системе продавца
+    string MerchantOrderId = 1;
+
+    // Код валюты ISO 4217
+    string Currency = 2;
+
+    // Сумма резервирования
+    uint32 Amount = 3;
+
+    // Тип оплаты: CARD, APPLE, GOOGLE, SAMSUNG, IPS
+    PayType PaymentType = 4;
+
+    // Список наименований товаров/услуг для отправки в ОФД (54-ФЗ). 
+    // Общая сумма всех товаров должна соответствовать amount.
+    repeated payment.api.Item Items = 5;
+
+    // Идентификация покупателя
+    payment.api.Buyer Buyer = 6;
+
+    // Индекс заказа в order-service
+    uint64 OrderId = 7;
+}
+
+message AddOrderRequest {
     // Идентификатор платежа в системе Продавца
     string merchant_order_id = 1;
     
@@ -57,27 +81,17 @@ message OrderRequest {
 
 }
 
-message Order {
-    // Индекс заказа в системе продавца
-    string MerchantOrderId = 1;
+message AddOrderResponse {
+    // Статус операции: true/false
+    bool Status = 1; 
 
-    // Код валюты ISO 4217
-    string Currency = 2;
+    // Текстовый код ошибки
+    string ErrCode = 2;
 
-    // Сумма резервирования
-    uint32 Amount = 3;
+    // Описание ошибки.
+    string ErrMessage = 3;
 
-    // Тип оплаты: CARD, APPLE, GOOGLE, SAMSUNG, IPS
-    PayType PaymentType = 4;
-
-    // Список наименований товаров/услуг для отправки в ОФД (54-ФЗ). 
-    // Общая сумма всех товаров должна соответствовать amount.
-    repeated payment.api.Item Items = 5;
-
-    // Идентификация покупателя
-    payment.api.Buyer Buyer = 6;
-
-    // Индекс заказа в order-service
-    uint64 OrderId = 7;
+    // Объект заказа
+    Order Order = 4;
 }
 

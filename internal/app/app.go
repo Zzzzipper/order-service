@@ -15,9 +15,9 @@ import (
 )
 
 func Run(cfg *config.Config) {
-	l := logger.New(cfg.LogLevel)
+	l := logger.New(cfg.Log.Level)
 
-	pg, err := postgres.New(*cfg)
+	pg, err := postgres.New(cfg.Postgres)
 
 	if err != nil {
 		l.Fatalf(fmt.Errorf("app - Run - postgres.New: %w", err))
@@ -31,7 +31,7 @@ func Run(cfg *config.Config) {
 
 	grpcServer := grpc.NewServer(l, orderUseCase)
 
-	err = grpcServer.Start(cfg.GrpcPort)
+	err = grpcServer.Start(cfg.GRPC.Port)
 
 	if err != nil {
 		l.Fatalf(fmt.Errorf("app - NewApp - grpcServer start error: %w", err))

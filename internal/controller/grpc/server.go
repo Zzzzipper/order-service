@@ -56,7 +56,7 @@ func (s *Server) Start(port string) error {
 	return nil
 }
 
-func (s *Server) AddOrder(ctx context.Context, req *order_api.OrderRequest) (*order_api.Order, error) {
+func (s *Server) AddOrder(ctx context.Context, req *order_api.AddOrderRequest) (*order_api.AddOrderResponse, error) {
 	beginTime := time.Now()
 
 	defer func() {
@@ -68,17 +68,32 @@ func (s *Server) AddOrder(ctx context.Context, req *order_api.OrderRequest) (*or
 
 	itemsBytes, err := json.Marshal(req.Items)
 	if err != nil {
-		return nil, err
+		s.logger.Errorf("AddOrder: json.Marshal(req.Items) - %w", err)
+		return &order_api.AddOrderResponse{
+			Status:     false,
+			ErrCode:    "INTERNAL_ERROR",
+			ErrMessage: err.Error(),
+		}, nil
 	}
 
 	buyerBytes, err := json.Marshal(req.Buyer)
 	if err != nil {
-		return nil, err
+		s.logger.Errorf("AddOrder: json.Marshal(req.Buyer) - %w", err)
+		return &order_api.AddOrderResponse{
+			Status:     false,
+			ErrCode:    "INTERNAL_ERROR",
+			ErrMessage: err.Error(),
+		}, nil
 	}
 
 	userDataBytes, err := json.Marshal(req.UserData)
 	if err != nil {
-		return nil, err
+		s.logger.Errorf("AddOrder: json.Marshal(req.UserData) - %w", err)
+		return &order_api.AddOrderResponse{
+			Status:     false,
+			ErrCode:    "INTERNAL_ERROR",
+			ErrMessage: err.Error(),
+		}, nil
 	}
 
 	order := &entity.Order{
@@ -98,31 +113,50 @@ func (s *Server) AddOrder(ctx context.Context, req *order_api.OrderRequest) (*or
 	newId, err := s.order.AddOrder(ctx, order)
 
 	if err != nil {
-		return nil, err
+		s.logger.Errorf("AddOrder: s.order.AddOrder(ctx, order) - %w", err)
+		return &order_api.AddOrderResponse{
+			Status:     false,
+			ErrCode:    "INTERNAL_ERROR",
+			ErrMessage: err.Error(),
+		}, nil
 	}
 
 	var items []*payment_api.Item
 	err = json.Unmarshal([]byte(order.Items), &items)
 
 	if err != nil {
-		return nil, err
+		s.logger.Errorf("AddOrder: json.Unmarshal([]byte(order.Items), &items) - %w", err)
+		return &order_api.AddOrderResponse{
+			Status:     false,
+			ErrCode:    "INTERNAL_ERROR",
+			ErrMessage: err.Error(),
+		}, nil
 	}
 
 	var buyer payment_api.Buyer
 	err = json.Unmarshal([]byte(order.Buyer), &buyer)
 
 	if err != nil {
-		return nil, err
+		s.logger.Errorf("AddOrder: json.Unmarshal([]byte(order.Buyer), &buyer) - %w", err)
+		return &order_api.AddOrderResponse{
+			Status:     false,
+			ErrCode:    "INTERNAL_ERROR",
+			ErrMessage: err.Error(),
+		}, nil
 	}
 
-	response := order_api.Order{
-		MerchantOrderId: order.MerchantOrderId,
-		Currency:        order.Currency,
-		Amount:          uint32(order.Amount),
-		PaymentType:     order_api.PayType(order.PaymentType),
-		Items:           items,
-		Buyer:           &buyer,
-		OrderId:         newId,
+	response := order_api.AddOrderResponse{
+		Status:  true,
+		ErrCode: "OK",
+		Order: &order_api.Order{
+			MerchantOrderId: order.MerchantOrderId,
+			Currency:        order.Currency,
+			Amount:          uint32(order.Amount),
+			PaymentType:     order_api.PayType(order.PaymentType),
+			Items:           items,
+			Buyer:           &buyer,
+			OrderId:         newId,
+		},
 	}
 
 	return &response, nil

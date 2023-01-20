@@ -35,7 +35,7 @@ func (r *OrderRepo) StoreOrder(ctx context.Context, req *entity.Order) (uint64, 
 	})
 
 	if err != nil {
-		return 0, fmt.Errorf("OrderRepo - StoreOrder - error: %w", err)
+		return 0, fmt.Errorf("OrderRepo - StoreOrder - : %w", err)
 	}
 
 	return req.ID, nil

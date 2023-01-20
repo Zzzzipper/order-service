@@ -7,7 +7,7 @@ import "order/api/init_types.proto";
 option go_package = "gitlab.mapcard.pro/external-map-team/api-proto/order/api;api";
 
 service OrderService {
-    rpc AddOrder(order.api.OrderRequest) returns (order.api.Order) {}
+    rpc AddOrder(order.api.AddOrderRequest) returns (order.api.AddOrderResponse) {}
 }
 
 
